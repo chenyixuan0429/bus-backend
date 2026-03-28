@@ -1,62 +1,57 @@
-# 导入 FastAPI 需要的库
+# main.py
+
+# 导入库
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-import socketio
-import socketio
-from starlette.middleware.wsgi import WSGIMiddleware
-import gps_simulator
-from fastapi import FastAPI
-# 创建 FastAPI 应用实例
+
+# 创建 FastAPI 应用
 app = FastAPI(title="公交监控系统API")
 
-# 配置 CORS（允许前端访问）
+# 允许跨域（前端能访问）
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 允许所有来源
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # 允许所有 HTTP 方法
-    allow_headers=["*"],  # 允许所有 HTTP 头
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# 测试接口：访问 http://localhost:8000/ 会返回这个信息
+# =====================
+# 测试接口
+# =====================
 @app.get("/")
 async def root():
     return {"message": "公交监控系统后端运行正常"}
 
-# 获取所有站点的接口
+# =====================
+# 站点接口
+# =====================
 @app.get("/api/stations")
 async def get_stations():
-    """返回所有站点信息"""
-    stations = [
-        {"id": 1, "name": "颐和园", "lat": 39.999, "lng": 116.272, "order": 1},
-        {"id": 2, "name": "西苑", "lat": 39.992, "lng": 116.286, "order": 2},
-        {"id": 3, "name": "北京大学西门", "lat": 39.987, "lng": 116.302, "order": 3},
-        {"id": 4, "name": "海淀桥北", "lat": 39.981, "lng": 116.309, "order": 4},
-        {"id": 5, "name": "中关村", "lat": 39.978, "lng": 116.318, "order": 5},
-        {"id": 6, "name": "中关村南", "lat": 39.972, "lng": 116.324, "order": 6}
+    return [
+        {"id": 1, "name": "高能街广场", "lat": 38.8623, "lng": 121.5233, "order": 1},
+        {"id": 2, "name": "高能街", "lat": 38.8630, "lng": 121.5220, "order": 2},
+        {"id": 3, "name": "名仕智慧谷", "lat": 38.8640, "lng": 121.5200, "order": 3},
+        {"id": 4, "name": "学子街", "lat": 38.8650, "lng": 121.5180, "order": 4},
+        {"id": 5, "name": "敬贤街", "lat": 38.8635, "lng": 121.5250, "order": 5},
+        {"id": 6, "name": "万达广场", "lat": 38.8614, "lng": 121.5285, "order": 6},
+        {"id": 7, "name": "七贤岭地铁站", "lat": 38.8620, "lng": 121.5300, "order": 7},
+        {"id": 8, "name": "信达街", "lat": 38.8605, "lng": 121.5350, "order": 8}
     ]
-    return stations
 
-# 启动服务器
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-
-# 模拟公交车位置
+# =====================
+# 公交车接口
+# =====================
 @app.get("/api/buses")
 async def get_buses():
-    buses = [
-        {
-            "bus_id": "BUS001",
-            "lat": 39.990,
-            "lng": 116.290,
-            "speed": 30
-        },
-        {
-            "bus_id": "BUS002",
-            "lat": 39.985,
-            "lng": 116.300,
-            "speed": 25
-        }
+    return [
+        {"bus_id": "BUS001", "lat": 39.990, "lng": 116.290, "speed": 30},
+        {"bus_id": "BUS002", "lat": 39.985, "lng": 116.300, "speed": 25}
     ]
-    return buses
+
+# =====================
+# 启动服务器
+# =====================
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
